@@ -10,7 +10,17 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential libssl-dev
 RUN npm install yarn -g
 
+# Install docker
+RUN curl -sSL https://get.docker.com/ | sh
+VOLUME sock:/var/run/docker.sock
+
+# Set yarn cache dir
+RUN yarn config set cache-folder /cache
+VOLUME cache:/cache
+
+COPY jenkins-slave /usr/local/bin/jenkins-slave
+RUN chmod o+x /usr/local/bin/jenkins-slave
+
 WORKDIR /home/jenkins
-USER jenkins
 
 ENTRYPOINT ["/opt/bin/entry_point.sh", "/usr/local/bin/jenkins-slave"]
