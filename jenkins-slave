@@ -36,6 +36,8 @@ if [ -S ${DOCKER_SOCKET} ]; then
     usermod -aG ${DOCKER_GROUP} jenkins
 fi
 
+source /home/jenkins/.rvm/scripts/rvm
+
 su jenkins
 
 if [[ $# -eq 1 ]]; then
