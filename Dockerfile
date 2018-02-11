@@ -9,20 +9,13 @@ RUN DISTRIB_CODENAME=$(cat /etc/*release* | grep DISTRIB_CODENAME | cut -f2 -d'=
     && echo "deb http://archive.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-updates main universe\n" >> /etc/apt/sources.list \
     && echo "deb http://security.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-security main universe\n" >> /etc/apt/sources.list
 
-RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install software-properties-common \
-  && add-apt-repository -y ppa:git-core/ppa
-
 #========================
 # Miscellaneous packages
-# iproute which is surprisingly not available in ubuntu:15.04 but is available in ubuntu:latest
-# OpenJDK8
-# groff is for aws-cli
-# tree is convenient for troubleshooting builds
 #========================
 RUN apt-get update -qqy \
+  && apt-get -qqy --no-install-recommends install software-properties-common \
+  && add-apt-repository -y ppa:git-core/ppa \
   && apt-get -qqy --no-install-recommends install \
-    iproute \
     openssh-client ssh-askpass\
     ca-certificates \
     openjdk-8-jdk \
@@ -30,9 +23,8 @@ RUN apt-get update -qqy \
     wget curl \
     git \
     build-essential \
-    less nano tree \
     jq \
-    python python-pip groff \
+    python python-pip \
     libssl-dev \
   && rm -rf /var/lib/apt/lists/* \
   && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
