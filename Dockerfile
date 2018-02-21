@@ -26,6 +26,9 @@ RUN apt-get update -qqy \
     jq \
     python python-pip \
     libssl-dev \
+    imagemagick \
+    xvfb \
+    firefox\
   && rm -rf /var/lib/apt/lists/* \
   && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
 
@@ -46,16 +49,25 @@ RUN useradd jenkins --shell /bin/bash --create-home \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
   && echo 'jenkins:secret' | chpasswd
 
-#==========
-# Maven
-#==========
-ENV MAVEN_VERSION 3.5.0
+WORKDIR /home/jenkins
 
-RUN curl -fsSL http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
-  && mv /usr/share/apache-maven-$MAVEN_VERSION /usr/share/maven \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+#==============
+# Imagemagick
+#==============
+RUN wget http://www.imagemagick.org/download/ImageMagick-7.0.7-23.tar.gz \
+  && tar xzvf ImageMagick-7.0.7-23.tar.gz \
+  && cd ImageMagick-7.0.7-23 \
+  && ./configure --prefix=/opt/imagemagick-7.0.7-23 && make
 
-ENV MAVEN_HOME /usr/share/maven
+#===================
+# Selenium firefox
+#===================
+RUN wget https://ftp.mozilla.org/pub/firefox/releases/46.0/linux-x86_64/en-US/firefox-46.0.tar.bz2 \
+  && tar -xjf firefox-46.0.tar.bz2 \
+  && rm -rf /opt/firefox \
+  && mv firefox /opt/firefox46  \
+  && mv /usr/bin/firefox /usr/bin/firefoxold \
+  && ln -s /opt/firefox46/firefox /usr/bin/firefox
 
 #====================================
 # AWS CLI
@@ -113,7 +125,5 @@ RUN curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-c
 RUN chmod a+rwx /home/jenkins
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 RUN chmod o+x /usr/local/bin/jenkins-slave
-
-WORKDIR /home/jenkins
 
 ENTRYPOINT ["/usr/local/bin/jenkins-slave"]
