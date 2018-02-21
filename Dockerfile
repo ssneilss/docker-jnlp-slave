@@ -65,7 +65,7 @@ RUN apt-get update -qqy \
   && mkdir -p /opt/firefox46 \
   && mv firefox /opt/firefox46 \
   && rm /usr/bin/firefox \
-  && ln -s /opt/firefox46/firefox /usr/bin/firefox \
+  && ln -s /opt/firefox46/firefox/firefox-bin /usr/bin/firefox \
 #====================================
 # AWS CLI
 #====================================
