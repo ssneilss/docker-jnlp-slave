@@ -52,29 +52,12 @@ RUN apt-get update -qqy \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
   && echo 'jenkins:secret' | chpasswd \
 #==============
-# Imagemagick
+# Geckodriver
 #==============
-&& wget http://www.imagemagick.org/download/ImageMagick-7.0.7-23.tar.gz \
-  && tar xzvf ImageMagick-7.0.7-23.tar.gz \
-  && cd ImageMagick-7.0.7-23 \
-  && ./configure --prefix=/opt/imagemagick-7.0.7-23 && make \
-#===================
-# Selenium firefox
-#===================
-&& wget https://ftp.mozilla.org/pub/firefox/releases/46.0/linux-x86_64/en-US/firefox-46.0.tar.bz2 \
-  && tar -xjf firefox-46.0.tar.bz2 \
-  && mkdir -p /opt/firefox46 \
-  && mv firefox /opt/firefox46 \
-  && rm /usr/bin/firefox \
-  && ln -s /opt/firefox46/firefox/firefox-bin /usr/bin/firefox \
 && wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz \
   && tar -zxvf geckodriver-v0.19.0-linux64.tar.gz \
   && mv geckodriver /usr/bin \
   && chmod a+x /usr/bin/geckodriver \
-#====================================
-# AWS CLI
-#====================================
-&& pip install awscli \
 #====================================
 # MYSQL CLIENT
 #====================================
