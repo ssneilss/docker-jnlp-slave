@@ -44,7 +44,8 @@ RUN apt-get update -qqy \
 # Configure ubuntu timezone
 && apt-get update -qqy \
 && apt-get -qqy --no-install-recommends install -y tzdata \
-  && dpkg-reconfigure tzdata \
+  && ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime \
+  && dpkg-reconfigure -f noninteractive tzdata \
 # Add normal user with passwordless sudo
 && useradd jenkins --shell /bin/bash --create-home \
   && usermod -a -G sudo jenkins \
