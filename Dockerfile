@@ -66,6 +66,10 @@ RUN apt-get update -qqy \
   && mv firefox /opt/firefox46 \
   && rm /usr/bin/firefox \
   && ln -s /opt/firefox46/firefox/firefox-bin /usr/bin/firefox \
+&& wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz \
+  && tar -zxvf geckodriver-v0.19.0-linux64.tar.gz \
+  && mv geckodriver /usr/bin \
+  && chmod a+x /usr/bin/geckodriver \
 #====================================
 # AWS CLI
 #====================================
