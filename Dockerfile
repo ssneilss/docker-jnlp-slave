@@ -39,6 +39,7 @@ RUN apt-get update -qqy \
   # workaround https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775775
   && [ -f "/etc/ssl/certs/java/cacerts" ] || /var/lib/dpkg/info/ca-certificates-java.postinst configure \
 && pip install --upgrade pip setuptools \
+&& pip install awscli --upgrade \
 # Configure ubuntu timezone
 && apt-get update -qqy \
 && apt-get -qqy --no-install-recommends install -y tzdata \
