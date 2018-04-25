@@ -30,7 +30,7 @@ RUN apt-get update -qqy \
     git \
     build-essential \
     jq \
-    python python-pip \
+    python2.7 python-pip \
     libssl-dev \
     imagemagick \
     ffmpeg \
